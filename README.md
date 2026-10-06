@@ -1,18 +1,15 @@
-# DOM Store - Lab 5
+# DOM Store — Lab 5
 
-Студент: Орынбек Маржан
+Student: Marzhan Orynbek  
+Repository: `dom-store-marzhan`
 
-## Қалай ашуға болады
-1. Репозиторийді жүктеп алыңыз немесе клондаңыз.
-2. `index.html` файлын кез келген браузерде ашыңыз.
+## How to Run
+1. Open `index.html` in any web browser, or visit the live GitHub Pages site.
 
-## Өңделген оқиғалар (Events Handled)
-1. `submit` — Форма жіберілгенде деректерді тексеріп (валидация), жаңа тауарды тиімді қосу үшін қолданылды.
-2. `click` — "Өшіру" батырмасын басуды Event Delegation арқылы `<tbody>` элементінде ұстау үшін пайдаланылды.
-3. `input` — Тауар санын өзгерткенде бетті қайта жүктемей (live update) жалпы сумманы лезде қайта есептеу үшін қолданылды.
+## Handled Events
+1. `submit` — Handles form validation (displays inline errors) and adds new products to the `Store`.
+2. `click` — Handles item deletion using **Event Delegation** attached to the table container.
+3. `input` — Re-calculates item totals and live grand total dynamically as quantities change without reloading the page.
 
-## Қолданылған AI құралдары
-- Тапсырма архитектурасы мен DOM логикасын құру үшін ChatGPT/Gemini қолданылды.
-
-## Беттің скриншоты
-![App Screenshot](./screenshot.png)
+## AI Tools Used
+- Gemini / ChatGPT
