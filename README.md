@@ -3,13 +3,33 @@
 Student: Marzhan Orynbek  
 Repository: `dom-store-marzhan`
 
-## How to Run
-1. Open `index.html` in any web browser, or visit the live GitHub Pages site.
+# 🛒 Online Store — Product Management System
 
-## Handled Events
-1. `submit` — Handles form validation (displays inline errors) and adds new products to the `Store`.
-2. `click` — Handles item deletion using **Event Delegation** attached to the table container.
-3. `input` — Re-calculates item totals and live grand total dynamically as quantities change without reloading the page.
+This project is a dynamic web application designed for adding products, updating quantities, deleting items, and automatically calculating totals in real time.
 
-## AI Tools Used
-- Gemini / ChatGPT
+## 📱 Application Preview
+
+![App Screenshot](src/screenshot.png)
+
+## 🔗 Live Demo
+
+🌐 **View Project:** [dom-store-marzhan](https://marzhanorinbek5-netizen.github.io/dom-store-marzhan/)
+
+---
+
+## 🛠 Tech Stack
+
+* **HTML5** — Semantic structure
+* **CSS3** — Modern purple gradient design (CSS Variables, Flexbox, CSS Grid, animations)
+* **JavaScript (ES6+)** — Dynamic UI rendering and DOM manipulation
+
+---
+
+## ✨ Features
+
+- [x] Add new products (Name, Price, Quantity)
+- [x] Real-time form validation and error handling
+- [x] Inline quantity adjustment inside the table
+- [x] Remove products from the list
+- [x] Dynamic calculation of total items and total price
+- [x] Fully responsive layout (optimized for mobile and desktop screens)
