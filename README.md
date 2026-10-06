@@ -9,7 +9,7 @@ This project is a dynamic web application designed for adding products, updating
 
 ## 📱 Application Preview
 
-![App Screenshot](src/screenshot.png)
+![App Screenshot](screenshot.png)
 
 ## 🔗 Live Demo
 
