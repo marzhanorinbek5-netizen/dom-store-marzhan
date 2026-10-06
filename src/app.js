@@ -1,115 +1,139 @@
-import { Store } from './Store.js';
+// Начальный список товаров
+let products = [
+  { id: 1, name: "Алма (Апорт)", price: 850, quantity: 2 },
+  { id: 2, name: "Сүт (1л)", price: 480, quantity: 3 },
+  { id: 3, name: "Нан (Ақ)", price: 220, quantity: 1 }
+];
 
-const store = new Store();
-
-// DOM Elements
-const form = document.getElementById('product-form');
-const productList = document.getElementById('product-list');
-const totalPriceEl = document.getElementById('total-price');
-const emptyState = document.getElementById('empty-state');
-const itemCountBadge = document.getElementById('item-count');
-
-const nameInput = document.getElementById('name');
-const priceInput = document.getElementById('price');
-const qtyInput = document.getElementById('qty');
+// Получение элементов DOM
+const productForm = document.getElementById('product-form');
+const nameInput = document.getElementById('product-name');
+const priceInput = document.getElementById('product-price');
+const quantityInput = document.getElementById('product-quantity');
 
 const nameError = document.getElementById('name-error');
 const priceError = document.getElementById('price-error');
-const qtyError = document.getElementById('qty-error');
+const quantityError = document.getElementById('quantity-error');
 
-// Form Validation
-function validateForm(name, price, qty) {
+const productList = document.getElementById('product-list');
+const emptyState = document.getElementById('empty-state');
+const totalCountElement = document.getElementById('total-count');
+const totalPriceElement = document.getElementById('total-price');
+
+// Отображение продуктов на странице
+function renderProducts() {
+  if (!productList) return;
+  
+  productList.innerHTML = '';
+
+  if (products.length === 0) {
+    if (emptyState) emptyState.style.display = 'block';
+  } else {
+    if (emptyState) emptyState.style.display = 'none';
+
+    products.forEach((product) => {
+      const row = document.createElement('tr');
+
+      row.innerHTML = `
+        <td><strong>${product.name}</strong></td>
+        <td>${product.price.toLocaleString()} ₸</td>
+        <td>
+          <input 
+            type="number" 
+            class="qty-input-table" 
+            value="${product.quantity}" 
+            min="1" 
+            onchange="updateQuantity(${product.id}, this.value)"
+          >
+        </td>
+        <td><strong>${(product.price * product.quantity).toLocaleString()} ₸</strong></td>
+        <td class="text-right">
+          <button class="btn-delete" onclick="deleteProduct(${product.id})">Өшіру</button>
+        </td>
+      `;
+
+      productList.appendChild(row);
+    });
+  }
+
+  updateTotal();
+}
+
+// Подсчет итоговой суммы и количества
+function updateTotal() {
+  const totalItems = products.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = products.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  if (totalCountElement) totalCountElement.textContent = totalItems;
+  if (totalPriceElement) totalPriceElement.textContent = `${totalPrice.toLocaleString()} ₸`;
+}
+
+// Валидация формы
+function validateForm() {
   let isValid = true;
 
-  nameError.textContent = '';
-  priceError.textContent = '';
-  qtyError.textContent = '';
-
-  if (!name.trim()) {
-    nameError.textContent = 'Please enter a product name.';
+  if (nameInput && !nameInput.value.trim()) {
+    if (nameError) nameError.textContent = 'Тауар атауын енгізіңіз!';
     isValid = false;
+  } else if (nameError) {
+    nameError.textContent = '';
   }
 
-  if (isNaN(price) || price <= 0) {
-    priceError.textContent = 'Price must be greater than 0.';
+  if (priceInput && (!priceInput.value || Number(priceInput.value) <= 0)) {
+    if (priceError) priceError.textContent = 'Бағасы 0-ден үлкен болуы керек!';
     isValid = false;
+  } else if (priceError) {
+    priceError.textContent = '';
   }
 
-  if (isNaN(qty) || qty <= 0 || !Number.isInteger(qty)) {
-    qtyError.textContent = 'Quantity must be a positive integer.';
+  if (quantityInput && (!quantityInput.value || Number(quantityInput.value) <= 0)) {
+    if (quantityError) quantityError.textContent = 'Саны кемінде 1 болуы керек!';
     isValid = false;
+  } else if (quantityError) {
+    quantityError.textContent = '';
   }
 
   return isValid;
 }
 
-// Render Products & Total
-function render() {
-  productList.innerHTML = '';
+// Добавление нового товара
+if (productForm) {
+  productForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-  if (store.items.length === 0) {
-    emptyState.style.display = 'block';
-  } else {
-    emptyState.style.display = 'none';
-  }
+    if (!validateForm()) return;
 
-  store.items.forEach((item, index) => {
-    const tr = document.createElement('tr');
+    const newProduct = {
+      id: Date.now(),
+      name: nameInput.value.trim(),
+      price: Number(priceInput.value),
+      quantity: Number(quantityInput.value)
+    };
 
-    tr.innerHTML = `
-      <td style="font-weight: 500;">${item.name}</td>
-      <td>$${item.price.toFixed(2)}</td>
-      <td>
-        <input type="number" class="qty-input-table" data-index="${index}" value="${item.qty}" min="1">
-      </td>
-      <td style="font-weight: 600;">$${(item.price * item.qty).toFixed(2)}</td>
-      <td class="text-right">
-        <button class="btn btn-delete" data-index="${index}">Delete</button>
-      </td>
-    `;
+    products.push(newProduct);
+    renderProducts();
 
-    productList.appendChild(tr);
+    productForm.reset();
   });
-
-  itemCountBadge.textContent = `${store.items.length} ${store.items.length === 1 ? 'item' : 'items'}`;
-  totalPriceEl.textContent = store.getTotal().toFixed(2);
 }
 
-// Event 1: Form Submit
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+// Изменение количества товара
+window.updateQuantity = function(id, newQty) {
+  const qty = Number(newQty);
+  if (qty <= 0) return;
 
-  const name = nameInput.value;
-  const price = parseFloat(priceInput.value);
-  const qty = parseInt(qtyInput.value, 10);
-
-  if (validateForm(name, price, qty)) {
-    store.add({ name, price, qty });
-    form.reset();
-    render();
+  const product = products.find(p => p.id === id);
+  if (product) {
+    product.quantity = qty;
+    renderProducts();
   }
-});
+};
 
-// Event Delegation: Delete & Change Quantity
-productList.addEventListener('click', (e) => {
-  if (e.target.classList.contains('btn-delete')) {
-    const index = e.target.dataset.index;
-    store.remove(index);
-    render();
-  }
-});
+// Удаление товара
+window.deleteProduct = function(id) {
+  products = products.filter(p => p.id !== id);
+  renderProducts();
+};
 
-productList.addEventListener('input', (e) => {
-  if (e.target.classList.contains('qty-input-table')) {
-    const index = e.target.dataset.index;
-    const newQty = parseInt(e.target.value, 10);
-
-    if (!isNaN(newQty) && newQty > 0) {
-      store.updateQty(index, newQty);
-      render();
-    }
-  }
-});
-
-// Initial Render
-render();
+// Запуск при загрузке страницы
+document.addEventListener('DOMContentLoaded', renderProducts);
