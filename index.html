@@ -1,54 +1,91 @@
 <!DOCTYPE html>
-<html lang="kk">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DOM Store - Lab 5</title>
+  <title>Store Management — Lab 5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Тауарларды басқару дүкені (Store)</h1>
-
-    <form id="product-form" novalidate>
-      <div class="form-group">
-        <label for="name">Тауар атауы:</label>
-        <input type="text" id="name" placeholder="Атауын енгізіңіз">
-        <span class="error" id="name-error"></span>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-icon">📦</div>
+      <div>
+        <h1>Store Manager</h1>
+        <p class="subtitle">Lab 5: Interactive Product Catalog & Cart</p>
       </div>
+    </header>
 
-      <div class="form-group">
-        <label for="price">Бағасы (₸):</label>
-        <input type="number" id="price" placeholder="Мысалы: 500">
-        <span class="error" id="price-error"></span>
-      </div>
+    <main class="main-content">
+      <!-- Add Product Form Card -->
+      <section class="card form-card">
+        <h2>Add New Product</h2>
+        <form id="product-form" novalidate>
+          <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" id="name" placeholder="e.g. Wireless Mouse">
+            <span class="error-msg" id="name-error"></span>
+          </div>
 
-      <div class="form-group">
-        <label for="qty">Саны:</label>
-        <input type="number" id="qty" placeholder="Мысалы: 2">
-        <span class="error" id="qty-error"></span>
-      </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="price">Price ($)</label>
+              <input type="number" id="price" step="0.01" placeholder="29.99">
+              <span class="error-msg" id="price-error"></span>
+            </div>
 
-      <button type="submit">Қосу</button>
-    </form>
+            <div class="form-group">
+              <label for="qty">Quantity</label>
+              <input type="number" id="qty" placeholder="1">
+              <span class="error-msg" id="qty-error"></span>
+            </div>
+          </div>
 
-    <h2>Тауарлар тізімі</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Атауы</th>
-          <th>Бағасы</th>
-          <th>Саны</th>
-          <th>Жиынтығы</th>
-          <th>Әрекеттер</th>
-        </tr>
-      </thead>
-      <tbody id="product-list"></tbody>
-    </table>
+          <button type="submit" class="btn btn-primary">
+            <span>+</span> Add Product
+          </button>
+        </form>
+      </section>
 
-    <div class="total-container">
-      <h3>Жалпы құны: <span id="total-price">0</span> ₸</h3>
-    </div>
+      <!-- Products List Card -->
+      <section class="card table-card">
+        <div class="card-header">
+          <h2>Product Inventory</h2>
+          <span class="badge" id="item-count">0 items</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th class="text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="product-list">
+              <!-- Dynamic rows will be inserted here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="empty-state">
+            <div class="empty-icon">🛒</div>
+            <p>No products added yet. Use the form above to add your first item!</p>
+          </div>
+        </div>
+
+        <!-- Total Bar -->
+        <div class="total-bar">
+          <span class="total-label">Grand Total:</span>
+          <span class="total-amount">$<span id="total-price">0.00</span></span>
+        </div>
+      </section>
+    </main>
   </div>
 
   <script type="module" src="src/app.js"></script>
